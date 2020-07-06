@@ -47,3 +47,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.item_id} {self.user_id} {self.msg}"
+
+class Watchlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    product = models.ManyToManyField(Listing)
+
+    def __str__(self):
+        return f" Watchlist id: {self.id} - Customer: {self.user}"

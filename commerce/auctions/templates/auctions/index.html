@@ -10,7 +10,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ listing.title }} ${{ listing.min_price}} </h5>
                 <p class="card-text">{{ listing.description }}</p>
-                <a href="{% url 'product_detail' listing.id %}" class="btn btn-primary">Bid</a>
+                <a href="{% url 'product_detail' listing.id %}" class="btn btn-primary">Bid</a> <a href="{% url 'add_watchlist' listing.id %}" class="btn btn-primary">Add to watchlist</a>
             </div>
             </div>
         {% endif %}

@@ -82,10 +82,29 @@ def createProduct(request):
     context = {'form': form}
     return render(request, "auctions/product_form.html", context)
 
-'''SEE PRODUCT'''
+''' SEE PRODUCT '''
 @login_required
 def productDetail(request, listing_id):
     product = Listing.objects.get(pk=listing_id)
     
     context = {'product':product}
     return render(request, "auctions/product_detail.html", context)
+
+''' ADD TO WATCHLIST '''
+@login_required
+def addWatchlist(request, listing_id):
+
+    product, created = Listing.objects.get_or_create(Listing, pk=listing_id)
+    watchlist, created = Watchlist.objects.get_or_create(user=request.user)
+    
+    watchlist.product.add(listing_id)
+    return HttpResponseRedirect(reverse("index"))
+
+''' SEE WATCHLIST '''
+@login_required
+def watchlist(request):
+    context = {
+        'user': request.user,
+        'watchlists': Watchlist.objects.all(),
+    }
+    return render(request, "auctions/watchlist.html", context)
