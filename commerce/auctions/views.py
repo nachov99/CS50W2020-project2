@@ -108,3 +108,27 @@ def watchlist(request):
         'watchlists': Watchlist.objects.all(),
     }
     return render(request, "auctions/watchlist.html", context)
+
+''' DELETE FROM WATCHLIST '''
+@login_required
+def deleteWatchlist(request, listing_id):
+    product, created = Listing.objects.get_or_create(Listing, pk=listing_id)
+    watchlist, created = Watchlist.objects.get_or_create(user=request.user)
+    
+    watchlist.product.delete(listing_id)
+    return HttpResponseRedirect(reverse("watchlist"))
+
+''' CATEGORIES '''
+@login_required
+def categories(request):
+    context = {
+        'categories': Category.objects.all(),
+    }
+    return render(request, "auctions/categories.html", context)
+
+@login_required
+def categoryDetail(request, category_id):
+    listings = Listing.objects.filter(category=category_id)
+
+    context = {'Listings':listings}
+    return render(request, "auctions/category_detail.html", context)

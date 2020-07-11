@@ -17,20 +17,13 @@
             {% for data in watchlist.product.all %}
             <tr>
                 <td>{{ data.category }}</td>
-            </tr>
-            <tr>
                 <td>{{ data.title }}</td>
-            </tr>
-            <tr>
                 <td>{{ data.min_price }}</td>
-            </tr>
-            <tr>
-                <td>"CurrentPrice"</td>
+                <td><a href="{% url 'delete_watchlist' listing.id %}" class="btn btn-primary">Delete</a></td>
             </tr>
             {% endfor %}
             {% endif %}
         {% endfor %}
     </tbody>
   </table>
-
 {% endblock %}
