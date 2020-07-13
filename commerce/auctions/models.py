@@ -35,7 +35,6 @@ class Bid(models.Model):
     item_id = models.ForeignKey(Listing, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     bid = models.DecimalField(max_digits=8, decimal_places=2)
-    status = models.CharField(max_length=7, choices=STATUS)
 
     def __str__(self):
         return f"{self.item_id} {self.user} ${self.bid}"

@@ -132,3 +132,14 @@ def categoryDetail(request, category_id):
 
     context = {'Listings':listings}
     return render(request, "auctions/category_detail.html", context)
+
+''' BID '''
+@login_required
+def bid(request, listing_id):
+    item_id = Listing.ojbects.get(pk = listing_id)
+    user = request.user
+    bid = request.POST['bid']
+    bid_details = Bid.objects.create(item_id = item_id, user = user, bid = bid)
+    print(bid_details)
+    bid_details.save()    
+    return HttpResponseRedirect(reverse('product_detail'))

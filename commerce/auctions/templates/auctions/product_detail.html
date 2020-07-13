@@ -4,6 +4,11 @@
     <h1>{{ product.title }}</h1>
     <h3>{{ product.category }}</h3>
     <h3>Minimum price: ${{ product.min_price }}</h3>
+    <h2>Bid</h2>
+    <form action="{url 'bid'}" method="POST">
+        {% csrf_token %}
+        <input type="number" min="1" name="bid">
+        <button type="submit" class="btn btn-primary" name="Submit">Submit</button>
+      </form>
     <img src="{{ product.imgurl }}" alt="">
-
 {% endblock %}
