@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 
 from .models import *
 from .forms import ListingForm
@@ -82,12 +83,28 @@ def createProduct(request):
     context = {'form': form}
     return render(request, "auctions/product_form.html", context)
 
+''' CLOSE AUCTION '''
+@login_required
+def closeAuction(request, listing_id):
+    listing = Listing.objects.get(pk = listing_id)
+    print('AAAAAAAAAAAAAAAAAA',listing)
+    listing.status = "Finished"
+    highBid = Bid.objects.all().aggregate(max_bid=(Max('bid')))
+    bider = Bid.objects.get(bid = highBid['max_bid'])
+    listing.winner = bider.user
+    print('#########', bider.user)
+    listing.save()
+    return render(request, "auctions/message.html", {"message": "The auction is closed!"})
+
 ''' SEE PRODUCT '''
 @login_required
 def productDetail(request, listing_id):
-    product = Listing.objects.get(pk=listing_id)
+    l = Listing.objects.get(pk=listing_id)
     
-    context = {'product':product}
+    context = {
+        'listing':l,
+        'comments': Comment.objects.all(),
+        }
     return render(request, "auctions/product_detail.html", context)
 
 ''' ADD TO WATCHLIST '''
@@ -114,9 +131,10 @@ def watchlist(request):
 def deleteWatchlist(request, listing_id):
     product, created = Listing.objects.get_or_create(Listing, pk=listing_id)
     watchlist, created = Watchlist.objects.get_or_create(user=request.user)
-    
-    watchlist.product.delete(listing_id)
-    return HttpResponseRedirect(reverse("watchlist"))
+    print('ooooooooooooooo', listing_id)
+    watchlist.product.remove(listing_id)
+    return render(request, "auctions/message.html",{'message': "Deleted from watchlist!"})
+    #return HttpResponseRedirect(reverse("watchlist"))
 
 ''' CATEGORIES '''
 @login_required
@@ -136,10 +154,24 @@ def categoryDetail(request, category_id):
 ''' BID '''
 @login_required
 def bid(request, listing_id):
-    item_id = Listing.ojbects.get(pk = listing_id)
+    listing = Listing.objects.get(pk = listing_id)
+    print('AAAAAAAAAAAAAAAAAA',listing)
+    price = float(request.POST.get('bid'))
+    if price <= listing.price:
+        return render(request, "auctions/message.html", {"message": "Bid must be greater than current price!"})
+    listing.price = price
+    listing.save()
     user = request.user
-    bid = request.POST['bid']
-    bid_details = Bid.objects.create(item_id = item_id, user = user, bid = bid)
-    print(bid_details)
-    bid_details.save()    
-    return HttpResponseRedirect(reverse('product_detail'))
+    bid = Bid(item_id = listing, user=user, bid=price)
+    bid.save()
+    return render(request, "auctions/message.html", {"message": "Your bid has been placed"})
+
+''' ADD COMMENT '''
+@login_required
+def comment(request, listing_id):
+    listing = Listing.objects.get(pk = listing_id)
+    msg = request.POST.get('msg')
+    user = request.user
+    com = Comment(item_id=listing, user=user, msg=msg)
+    com.save()
+    return render(request, "auctions/message.html", {"message": "Your comment has been placed"})

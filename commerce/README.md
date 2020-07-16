@@ -1,9 +1,9 @@
 --TODO--
 [ ] Listing
-    [ ] Delete products from watchlist
-    [ ] Bid on the item
-    [ ] Close the auction if the user is the owner
+    [x] Delete products from watchlist
+    [x] Bid on the item
+    [x] Close the auction if the user is the owner
     [ ] Alert the user who won the auction
-    [ ] Add comments to the auction
+    [x] Add comments to the auction
 
 [x] Show categories in a single page

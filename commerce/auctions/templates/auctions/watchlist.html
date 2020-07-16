@@ -7,19 +7,19 @@
       <tr>
         <th scope="col">Category</th>
         <th scope="col">Title</th>
-        <th scope="col">Minimum Price</th>
         <th scope="col">Current Price</th>
+        <th scope="col">Actions</th>
       </tr>
     </thead>
     <tbody>
         {% for watchlist in watchlists %}
             {% if watchlist.user == request.user %}
-            {% for data in watchlist.product.all %}
+            {% for listing in watchlist.product.all %}
             <tr>
-                <td>{{ data.category }}</td>
-                <td>{{ data.title }}</td>
-                <td>{{ data.min_price }}</td>
-                <td><a href="{% url 'delete_watchlist' listing.id %}" class="btn btn-primary">Delete</a></td>
+                <td>{{ listing.category }}</td>
+                <td>{{ listing.title }}</td>
+                <td>{{ listing.price }}</td>
+                <td><a href="watchlist/delete/{{listing.id}}" class="btn btn-primary">Delete</a> <a href="{% url 'product_detail' listing.id %}" class="btn btn-primary">Bid</a></td>
             </tr>
             {% endfor %}
             {% endif %}

@@ -8,10 +8,14 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("create_product", views.createProduct, name="create_product"),
+    path("product_detail/close/<listing_id>", views.closeAuction, name="closeAuction"),
     path("product_detail/<listing_id>", views.productDetail, name="product_detail"),
     path("watchlist/add/<listing_id>", views.addWatchlist, name="add_watchlist"),
     path("watchlist/delete/<listing_id>", views.deleteWatchlist, name="delete_watchlist"),
     path("watchlist", views.watchlist, name="watchlist"),
     path("categories", views.categories, name="categories"),
     path("category_detail/<category_id>", views.categoryDetail, name="category_detail"),
+    path("product_detail/bid/<listing_id>", views.bid, name="bid"),
+    path("product_detail/comment/<listing_id>", views.comment, name="comment"),
+    
 ]
