@@ -7,12 +7,17 @@
     {% endif %}
     <h3>{{ listing.category }}</h3>
     <h3>Price: ${{ listing.price }}</h3>
-    <h4>Add your Bid: </h4>
-      <form class="" action="bid/{{listing.id}}" method="post">
-        {% csrf_token %}
-        <input type="number" name="bid" value="" placeholder="Bid" min=1>
-        <input class="btn btn-primary" type="submit" name="" value="Bid Now">
-      </form>
+    {% if listing.status == "Finished" %}
+      <h4>The auction is closed.</h4>
+      <h5>Winner: {{ listing.winner }} </h5>
+    {% else %}
+      <h4>Add your Bid: </h4>
+        <form class="" action="bid/{{listing.id}}" method="post">
+          {% csrf_token %}
+          <input type="number" name="bid" value="" placeholder="Bid" min=1>
+          <input class="btn btn-primary" type="submit" name="" value="Bid Now">
+        </form>
+    {% endif %}
     <img src="{{ listing.imgurl }}" alt="">
     <h4>Add comment:</h4>
     <form action="comment/{{listing.id}}" method="POST">

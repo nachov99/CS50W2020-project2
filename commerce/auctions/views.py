@@ -91,7 +91,7 @@ def closeAuction(request, listing_id):
     listing.status = "Finished"
     highBid = Bid.objects.all().aggregate(max_bid=(Max('bid')))
     bider = Bid.objects.get(bid = highBid['max_bid'])
-    listing.winner = bider.user
+    listing.winner = str(bider.user)
     print('#########', bider.user)
     listing.save()
     return render(request, "auctions/message.html", {"message": "The auction is closed!"})
